@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src='https://d3js.org/d3.v7.min.js'></script>
+  <title>Project 2</title>
+</head>
+<body>
+  <svg width=700 height=700 style='padding: 20px'></svg>
+
+  <script>
+    const svg = d3.select('svg');
+    // generated path using figma 
+    const fieldPath = 'M350 0C175.629 0 30.5457 104.819 0 243.194L350 595.056L700 243.194C669.454 104.819 524.37 0 350 0Z'
+    
+    svg.append('path')
+    .attr('fill', '#9CC596')
+    .attr('d', fieldPath)
+
+  </script>
+  
+</body>
+</html>
