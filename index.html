@@ -5,17 +5,86 @@
   <title>Project 2</title>
 </head>
 <body>
-  <svg width=700 height=700 style='padding: 20px'></svg>
+  <style>
+    html {
+      font-family: sans-serif;
+    }
+
+    /* used w3schools.com for slider styling inspo */
+    .slider {
+      -webkit-appearance: none;
+      width: 30%;
+      height: 10px;
+      background: lightgrey;
+      outline: none;
+    }
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 10px;
+      height: 20px;
+      background:#0E6738;
+      cursor: pointer;
+    }
+  </style>
+
+  
+  <div style='padding: 20px'>
+    <svg width=700 height=600></svg>
+    <p>
+      Selected Year: <b>2016</b> <br/> 
+      <span style='font-size: 12px'>Use the slider below to change the selected year.</span>
+    </p>
+    <input type='range' min='1985' max='2016' value='2016' step='1' class='slider'>
+  </div>
 
   <script>
     const svg = d3.select('svg');
     // generated path using figma 
     const fieldPath = 'M350 0C175.629 0 30.5457 104.819 0 243.194L350 595.056L700 243.194C669.454 104.819 524.37 0 350 0Z'
-    
     svg.append('path')
-    .attr('fill', '#9CC596')
-    .attr('d', fieldPath)
+       .attr('fill', '#9CC596')
+       .attr('d', fieldPath)
+    
+    // G_p: Games as pitcher
+    // G_c: Games as catcher
+    // G_1b: Games as firstbaseman
+    // G_2b: Games as secondbaseman
+    // G_3b: Games as thirdbaseman
+    // G_ss: Games as shortstop
+    // G_lf: Games as leftfielder
+    // G_cf: Games as centerfielder
+    // G_rf: Games as right fielder
+    const positions = ['G_p', 'G_c', 'G_1b', 'G_2b', 'G_3b', 'G_ss', 'G_lf', 'G_cf', 'G_rf']
+    const positionsOnField = {
+      'G_p': [350, 420],
+      'G_c': [350, 560],
+      'G_1b': [510, 365],
+      'G_2b': [440, 275],
+      'G_3b': [190, 365],
+      'G_ss': [260, 274],
+      'G_lf': [150, 170],
+      'G_cf': [350, 105],
+      'G_rf': [550, 170]
+    }
 
+    positions.forEach(position => {
+      svg.append('circle')
+         .attr('cx', positionsOnField[position][0])
+         .attr('cy', positionsOnField[position][1])
+         .attr('r', 5)
+         .attr('fill', 'black');
+    })
+
+    const slider = d3.select('input');
+    slider.on('input', function() { 
+      d3.select('b').text(this.value);
+    });
+    
+
+    d3.csv('csv-files/Appearances.csv').then( data => {
+      console.log(data); 
+    })
   </script>
   
 </body>
