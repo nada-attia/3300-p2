@@ -1,5 +1,6 @@
 import csv
 
+playerID, birthYear, birthMonth, birthDay, birthCountry, birthState, birthCity, deathYear, deathMonth, deathDay, deathCountry, deathState, deathCity, nameFirst, nameLast, nameGiven, weight, height, bats, throws, debut, finalGame, retroID, bbrefID, birth_date, debut_date, finalgame_date, death_date, ID, yearID, teamID, team_ID, lgID, playerID: 1, salary, ID: 1, yearID: 1, teamID: 1, team_ID: 1, lgID: 1, playerID: 2, G_all, GS, G_batting, G_defense, G_p, G_c, G_1b, G_2b, G_3b, G_ss, G_lf, G_cf, G_rf, G_of, G_dh, G_ph, G_pr
 PLAYERID = 0
 NAMEFIRST = 1
 NAMELAST = 2
@@ -21,7 +22,9 @@ GAMES_CENTERFIELD = 23
 GAMES_RIGHTFIELD = 24
 
 
-f = open('joined_data1.csv')
+f = open('data-utils/joined_data.csv')
+csv_f = csv.reader(f)
+
 f_1985 = open('1985.csv', 'w')
 f_1986 = open('1986.csv', 'w')
 f_1987 = open('1987.csv', 'w')
@@ -55,104 +58,105 @@ f_2014 = open('2014.csv', 'w')
 f_2015 = open('2015.csv', 'w')
 f_2016 = open('2016.csv', 'w')
 
+col = 'playerID,birthYear,birthMonth,birthDay,birthCountry,birthState,birthCity,deathYear,deathMonth,deathDay,deathCountry,deathState,deathCity,nameFirst,nameLast,nameGiven,weight,height,bats,throws,debut,finalGame,retroID,bbrefID,birth_date,debut_date,finalgame_date,death_date,ID,yearID,teamID,team_ID,lgID,playerID:1,salary,ID:1,yearID:1,teamID:1,team_ID:1,lgID:1,playerID:2,G_all,GS,G_batting,G_defense,G_p,G_c,G_1b,G_2b,G_3b,G_ss,G_lf,G_cf,G_rf,G_of,G_dh,G_ph,G_pr'
+f_1985.write(col)
+f_1986.write(col)
+f_1987.write(col)
+f_1988.write(col)
+f_1989.write(col)
+f_1990.write(col)
+f_1991.write(col)
+f_1992.write(col)
+f_1993.write(col)
+f_1994.write(col)
+f_1995.write(col)
+f_1996.write(col)
+f_1997.write(col)
+f_1998.write(col)
+f_1999.write(col)
+f_2000.write(col)
+f_2001.write(col)
+f_2002.write(col)
+f_2003.write(col)
+f_2004.write(col)
+f_2005.write(col)
+f_2006.write(col)
+f_2007.write(col)
+f_2008.write(col)
+f_2009.write(col)
+f_2010.write(col)
+f_2011.write(col)
+f_2012.write(col)
+f_2013.write(col)
+f_2014.write(col)
+f_2015.write(col)
+f_2016.write(col)
 
-csv_f = csv.reader(f)
-csv_1985 = csv.writer(f_1985)
-csv_1986 = csv.writer(f_1986)
-csv_1987 = csv.writer(f_1987)
-csv_1988 = csv.writer(f_1988)
-csv_1989 = csv.writer(f_1989)
-csv_1990 = csv.writer(f_1990)
-csv_1991 = csv.writer(f_1991)
-csv_1992 = csv.writer(f_1992)
-csv_1993 = csv.writer(f_1993)
-csv_1994 = csv.writer(f_1994)
-csv_1995 = csv.writer(f_1995)
-csv_1996 = csv.writer(f_1996)
-csv_1997 = csv.writer(f_1997)
-csv_1998 = csv.writer(f_1998)
-csv_1999 = csv.writer(f_1999)
-csv_2000 = csv.writer(f_2000)
-csv_2001 = csv.writer(f_2001)
-csv_2002 = csv.writer(f_2002)
-csv_2003 = csv.writer(f_2003)
-csv_2004 = csv.writer(f_2004)
-csv_2005 = csv.writer(f_2005)
-csv_2006 = csv.writer(f_2006)
-csv_2007 = csv.writer(f_2007)
-csv_2008 = csv.writer(f_2008)
-csv_2009 = csv.writer(f_2009)
-csv_2010 = csv.writer(f_2010)
-csv_2011 = csv.writer(f_2011)
-csv_2012 = csv.writer(f_2012)
-csv_2013 = csv.writer(f_2013)
-csv_2014 = csv.writer(f_2014)
-csv_2015 = csv.writer(f_2015)
-csv_2016 = csv.writer(f_2016)
+print(csv_f)
+for (csv_row, row) in zip(csv_f, f):
+    year = csv_row[30]
 
-for row in csv_f:
-    year = row[YEARID]
     if year == '1985':
-        csv_1985.writerow(row)
+        f_1985.write(row)
     elif year == '1986':
-        csv_1986.writerow(row)
+        f_1986.write(row)
     elif year == '1987':
-        csv_1987.writerow(row)
+        f_1987.write(row)
     elif year == '1988':
-        csv_1988.writerow(row)
+        f_1988.write(row)
     elif year == '1989':
-        csv_1989.writerow(row)
+        f_1989.write(row)
     elif year == '1990':
-        csv_1990.writerow(row)
+        f_1990.write(row)
     elif year == '1991':
-        csv_1991.writerow(row)
+        f_1991.write(row)
     elif year == '1992':
-        csv_1992.writerow(row)
+        f_1992.write(row)
     elif year == '1993':
-        csv_1993.writerow(row)
+        f_1993.write(row)
     elif year == '1994':
-        csv_1994.writerow(row)
+        f_1994.write(row)
     elif year == '1995':
-        csv_1995.writerow(row)
+        f_1995.write(row)
     elif year == '1996':
-        csv_1996.writerow(row)
+        f_1996.write(row)
     elif year == '1997':
-        csv_1997.writerow(row)
+        f_1997.write(row)
     elif year == '1998':
-        csv_1998.writerow(row)
+        f_1998.write(row)
     elif year == '1999':
-        csv_1999.writerow(row)
+        f_1999.write(row)
     elif year == '2000':
-        csv_2000.writerow(row)
+        f_2000.write(row)
     elif year == '2001':
-        csv_2001.writerow(row)
+        f_2001.write(row)
     elif year == '2002':
-        csv_2002.writerow(row)
+        f_2002.write(row)
     elif year == '2003':
-        csv_2003.writerow(row)
+        f_2003.write(row)
     elif year == '2004':
-        csv_2004.writerow(row)
+        f_2004.write(row)
     elif year == '2005':
-        csv_2005.writerow(row)
+        f_2005.write(row)
     elif year == '2006':
-        csv_2006.writerow(row)
+        f_2006.write(row)
     elif year == '2007':
-        csv_2007.writerow(row)
+        f_2007.write(row)
     elif year == '2008':
-        csv_2008.writerow(row)
+        f_2008.write(row)
     elif year == '2009':
-        csv_2009.writerow(row)
+        f_2009.write(row)
     elif year == '2010':
-        csv_2010.writerow(row)
+        f_2010.write(row)
     elif year == '2011':
-        csv_2011.writerow(row)
+        f_2011.write(row)
     elif year == '2012':
-        csv_2012.writerow(row)
+        f_2012.write(row)
     elif year == '2013':
-        csv_2013.writerow(row)
+        f_2013.write(row)
     elif year == '2014':
-        csv_2014.writerow(row)
+        f_2014.write(row)
     elif year == '2015':
-        csv_2015.writerow(row)
+        f_2015.write(row)
     elif year == '2016':
-        csv_2016.writerow(row)
+        f_2016.write(row)
