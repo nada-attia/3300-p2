@@ -162,6 +162,7 @@
           .attr('stroke-width', 2);
         const posID = d3.select(this).attr('id');
         const pos = positionsOnField[posID]['name'];
+        displayChart(pos);
         d3.select('#title').text('Top 10 Highest Paid ' + pos + ' in ' + year)
           .style('font-size', 18);
         // const textBox = svgField.append('rect')
@@ -191,6 +192,19 @@
       
       })
     }
+
+    function displayChart(pos) {
+      const filePath = './csv-files/Yearly Data/'+ year + ".csv";
+      d3.csv(filePath).then(data => {
+        data.forEach(d => {
+          //console.log(d);
+
+
+        })
+      });
+
+    }
+
 
     displayField();
 
