@@ -123,8 +123,10 @@
       }
     }
 
-    d3.csv('csv-files/joined_data.csv').then( data => {
-      data.forEach(d => {
+    function displayField() {
+      d3.csv('csv-files/joined_data.csv').then( data => {
+      const filteredData = data.filter(d => d['yearID'] == year);
+      filteredData.forEach(d => {
         positions.forEach(pos => {
           if (Number(d[pos]) > 0) {
             positionsOnField[pos]['total salary'] = Number(d['salary']);
@@ -186,14 +188,19 @@
         d3.select('#title').text('');
         d3.select('#avgSalaryText').remove();
       });
-
-      const slider = d3.select('input');
-      slider.on('input', function() { 
-        d3.select('b').text(this.value);
-        year = this.value;
-      });
       
-    })
+      })
+    }
+
+    displayField();
+
+    const slider = d3.select('input');
+    slider.on('input', function() { 
+      d3.select('b').text(this.value);
+      year = this.value;
+      displayField();
+    });
+    
   </script>
   
 </body>
