@@ -39,16 +39,16 @@
     </div>
     
     <!-- generated background image using figma -->
-    <svg id='field' width="700" height="650" viewBox="0 0 700 612" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M350 0C175.629 0 30.5457 104.819 0 243.194L350 595.056L700 243.194C669.454 104.819 524.37 0 350 0Z" fill="#84AB7E"/>
-      <path d="M350.923 210C249.832 210 151.148 281.57 117 361.5L350.923 596L582.587 361.5C549.066 281.57 452.014 210 350.923 210Z" fill="#E6C5B3"/>
-      <circle cx="349.423" cy="557" r="55" fill="#E6C5B3"/>
-      <rect x="207.499" y="425.626" width="198.711" height="202.854" transform="rotate(-45 207.499 425.626)" fill="#84AB7E"/>
-      <circle cx="349.721" cy="314.291" r="38.2906" fill="#E6C5B3"/>
-      <path d="M268.581 427.339C268.581 408.306 254.694 392.516 236.5 389.549L192 427.339L236.5 465.129C254.694 462.162 268.581 446.372 268.581 427.339Z" fill="#E6C5B3"/>
-      <path d="M427 427.79C427 446.823 440.887 462.613 459.081 465.579L503.581 427.79L459.081 390C440.887 392.967 427 408.757 427 427.79Z" fill="#E6C5B3"/>
-      <circle cx="349.721" cy="541.299" r="38.2906" fill="#E6C5B3"/>
-      <circle cx="352.5" cy="425.5" r="31.5" fill="#E6C5B3"/>
+    <svg id='field' width='700' height='650' viewBox='0 0 700 612' fill='none' xmlns='http://www.w3.org/2000/svg'>
+      <path d='M350 0C175.629 0 30.5457 104.819 0 243.194L350 595.056L700 243.194C669.454 104.819 524.37 0 350 0Z' fill='#84AB7E'/>
+      <path d='M350.923 210C249.832 210 151.148 281.57 117 361.5L350.923 596L582.587 361.5C549.066 281.57 452.014 210 350.923 210Z' fill='#E6C5B3'/>
+      <circle cx='349.423' cy='557' r='55' fill='#E6C5B3'/>
+      <rect x='207.499' y='425.626' width='198.711' height='202.854' transform='rotate(-45 207.499 425.626)' fill='#84AB7E'/>
+      <circle cx='349.721' cy='314.291' r='38.2906' fill='#E6C5B3'/>
+      <path d='M268.581 427.339C268.581 408.306 254.694 392.516 236.5 389.549L192 427.339L236.5 465.129C254.694 462.162 268.581 446.372 268.581 427.339Z' fill='#E6C5B3'/>
+      <path d='M427 427.79C427 446.823 440.887 462.613 459.081 465.579L503.581 427.79L459.081 390C440.887 392.967 427 408.757 427 427.79Z' fill='#E6C5B3'/>
+      <circle cx='349.721' cy='541.299' r='38.2906' fill='#E6C5B3'/>
+      <circle cx='352.5' cy='425.5' r='31.5' fill='#E6C5B3'/>
       </svg>
     <svg width=500 height=600 id='barchart'></svg>
     
@@ -62,8 +62,8 @@
     const positions = ['G_p', 'G_c', 'G_1b', 'G_2b', 'G_3b', 'G_ss', 'G_lf', 'G_cf', 'G_rf']
     const positionsOnField = {
       'G_p': {
-        'x': 352,
-        'y': 425,
+        'x': 353,
+        'y': 426,
         'name': 'Pitcher'
       },
       'G_c': {
@@ -132,7 +132,7 @@
       })
 
       const avgSalaryExtent = d3.extent(positions, d => positionsOnField[d]['average salary']);
-      const avgSalaryScale = d3.scaleLinear().domain(avgSalaryExtent).range([0, 30]);
+      const avgSalaryScale = d3.scaleLinear().domain(avgSalaryExtent).range([10, 30]);
 
       const positionsCircles = svgField.selectAll('circle.positions').data(positions)
                                         .join('circle')
@@ -175,7 +175,7 @@
                 .attr('y', 570)
                 .text('Average Salary of ' + pos + ':')
                 .attr('id', 'avgSalaryText')
-                .text('$'+Math.floor(positionsOnField[posID]['average salary']))
+                .text('$'+ d3.format(',r')(Math.floor(positionsOnField[posID]['average salary'])))
                 .attr('fill', 'steelblue')
                 .attr('text-anchor', 'middle')
                 .attr('dominant-baseline', 'central')
