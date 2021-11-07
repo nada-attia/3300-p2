@@ -61,76 +61,64 @@
       'G_p': {
         'x': 350,
         'y': 420,
-        'name': 'Pitcher',
-        'total salary': 0,
-        'number of players': 0
+        'name': 'Pitcher'
       },
       'G_c': {
         'x': 350,
         'y': 560,
-        'name': 'Catcher',
-        'total salary': 0,
-        'number of players': 0
+        'name': 'Catcher'
       },
       'G_1b': {
         'x': 510,
         'y': 365,
-        'name': 'First Baseman',
-        'total salary': 0,
-        'number of players': 0
+        'name': 'First Baseman'
       },
       'G_2b': {
         'x': 440,
         'y': 275,
-        'name': 'Second Baseman',
-        'total salary': 0,
-        'number of players': 0
+        'name': 'Second Baseman'
       },
       'G_3b': {
         'x': 190,
         'y': 365,
-        'name': 'Third Baseman',
-        'total salary': 0,
-        'number of players': 0
+        'name': 'Third Baseman'
       },
       'G_ss': {
         'x': 260,
         'y': 274,
-        'name': 'Short Stop',
-        'total salary': 0,
-        'number of players': 0
+        'name': 'Short Stop'
       },
       'G_lf': {
         'x': 150,
         'y': 170,
-        'name': 'Left Fielder',
-        'total salary': 0,
-        'number of players': 0
+        'name': 'Left Fielder'
       },
       'G_cf': {
         'x': 350,
         'y': 105,
-        'name': 'Center Fielder',
-        'total salary': 0,
-        'number of players': 0
+        'name': 'Center Fielder'
       },
       'G_rf': {
         'x': 550,
         'y': 170,
-        'name': 'Center Fielder',
-        'total salary': 0,
-        'number of players': 0
+        'name': 'Center Fielder'
       }
     }
 
     function displayField() {
-      const filePath = './csv-files/'+ year + ".csv";
+      // clean up
+      positions.forEach(pos => {
+        positionsOnField[pos]['total salary'] = 0;
+        positionsOnField[pos]['number of players'] = 0;
+      })
+      
+      const filePath = './yearly-data/'+ year + ".csv";
       d3.csv(filePath).then( data => {
       console.log(data);
       data.forEach(d => {
         positions.forEach(pos => {
           if (Number(d[pos]) > 0) {
-            positionsOnField[pos]['total salary'] = Number(d['salary']);
+            positionsOnField[pos]['total salary'] += Number(d['salary']);
             positionsOnField[pos]['number of players'] ++;
           } 
         })
@@ -178,7 +166,7 @@
         svgField.append('text')
                 .attr('x', 450)
                 .attr('y', 550)
-                .text('average salary: $' + Math.floor(positionsOnField[posID]['average salary']) + '000')
+                .text('average salary: $' + Math.floor(positionsOnField[posID]['average salary']))
                 .attr('id', 'avgSalaryText')
       });
 
@@ -199,6 +187,7 @@
     slider.on('input', function() { 
       d3.select('b').text(this.value);
       year = this.value;
+      console.log(year);
       displayField();
     });
     
