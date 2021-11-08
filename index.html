@@ -232,11 +232,20 @@
                   .call(leftGridlines);
 
       const salaryExtent = 1000;
-      let bottomAxis = d3.scaleLinear().domain([0, salaryExtent]).range([0, chartWidth]);
+      let salaryScale = d3.scaleLinear().domain([0, salaryExtent]).range([0, chartWidth]);
+      let bottomAxis = d3.axisBottom(salaryScale).tickFormat("");
       annotations.append("g")
                  .attr("class", "x axis")
                  .attr("transform",`translate(${margin.left},${chartHeight+margin.top+10})`)
                  .call(bottomAxis);
+
+      // chartArea.selectAll('rect.bar').data( data )
+      //          .join('rect').attr('class','bar')
+      //          .attr("fill", colorScale())
+      //          .attr("x", d =>  salaryScale(d['salary']))
+      //          .attr("y", d => nameScale(d['name']) )
+      //          .attr("height", nameScale.bandwidth())
+      //          .attr("width", d => salaryScale(d['salary']));
     }
 
     displayField();
