@@ -160,7 +160,7 @@
         const pos = positionsOnField[posID]['name'];
         const posData = year_data.filter(d => d['position'] === posID)
         const posTopData = posData.slice(0, 10);
-        console.log(posTopData);
+        displayChart(posTopData);
 
         svgChart.append('text')
           .attr('id', 'title')
@@ -191,8 +191,6 @@
                 .attr('text-anchor', 'middle')
                 .attr('dominant-baseline', 'central')
                 .attr('font-weight', 'bold')
-
-        displayChart();
       });
 
       positionsCircles.on('mouseout', function() {  
@@ -207,7 +205,8 @@
       });
     }
 
-    function displayChart() {
+    function displayChart(top10) {
+      // top 10 is array of 10 objects with top10[0] is highest salary
       const containerWidth = svgChart.attr("width");
       const containerHeight = svgChart.attr("height");
       const margin = {top: 50, right: 10, bottom: 10, left: 50};
@@ -218,8 +217,18 @@
                          .attr("transform",`translate(${margin.left},${margin.top})`);
       let annotations = svgChart.append("g").attr("id","annotations");
 
-      const names = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
-      const nameScale = d3.scaleBand().domain(names).range([chartHeight, 0]).padding(0.05);
+      let names = Array(10);
+      let firstNames = Array(10);
+      let salaries = Array(10);
+      let i = 0;
+      top10.forEach( player => {
+        names[i] = player['nameFirst'] + " " + player['nameLast'];
+        firstNames[i] = player['nameFirst'];
+        salaries[i] = player['salary'];
+        i++;
+      })
+
+      const nameScale = d3.scaleBand().domain(firstNames).range([chartHeight , 0]).padding(0.05);
       let leftAxis = d3.axisLeft(nameScale).tickFormat("");
       let leftGridlines = d3.axisLeft(nameScale).tickSize(-chartWidth-10).tickFormat("");
 
@@ -232,21 +241,22 @@
                   .attr("transform",`translate(${margin.left-10},${margin.top})`)
                   .call(leftGridlines);
 
-      const salaryExtent = 1000;
-      let salaryScale = d3.scaleLinear().domain([0, salaryExtent]).range([0, chartWidth]);
+      let salaryScale = d3.scaleLinear().domain([salaries[9], salaries[0]]).range([0, chartWidth]);
       let bottomAxis = d3.axisBottom(salaryScale).tickFormat("");
       annotations.append("g")
                  .attr("class", "x axis")
                  .attr("transform",`translate(${margin.left},${chartHeight+margin.top+10})`)
                  .call(bottomAxis);
 
-      // chartArea.selectAll('rect.bar').data( data )
-      //          .join('rect').attr('class','bar')
-      //          .attr("fill", colorScale())
-      //          .attr("x", d =>  salaryScale(d['salary']))
-      //          .attr("y", d => nameScale(d['name']) )
-      //          .attr("height", nameScale.bandwidth())
-      //          .attr("width", d => salaryScale(d['salary']));
+      let colorScale = d3.scaleSequential(d3.interpolateBlues).domain([salaries[9], salaries[0]]);
+
+      chartArea.selectAll('rect.bar').data( top10 )
+               .join('rect').attr('class','bar')
+               .attr("fill", d => colorScale(d['salary'])) //colorScale soon
+               .attr("x", 0 )
+               .attr("y", d => chartHeight - nameScale(d['nameFirst']) )
+               .attr("height", nameScale.bandwidth())
+               .attr("width", d => salaryScale(d['salary']))
     }
 
     displayField();
