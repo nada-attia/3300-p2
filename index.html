@@ -209,13 +209,13 @@
       // top 10 is array of 10 objects with top10[0] is highest salary
       const containerWidth = svgChart.attr("width");
       const containerHeight = svgChart.attr("height");
-      const margin = {top: 50, right: 10, bottom: 10, left: 50};
+      const margin = {top: 50, right: 10, bottom: 100, left: 50};
       const chartWidth = containerWidth - margin.left - margin.right;
       const chartHeight = containerHeight - margin.top - margin.bottom;
 
       let chartArea = svgChart.append("g").attr("id","barData")
                          .attr("transform",`translate(${margin.left},${margin.top})`);
-      let annotations = svgChart.append("g").attr("id","annotations");
+      let annotations = chartArea.append("g").attr("id","annotations");
 
       let names = Array(10);
       let firstNames = Array(10);
@@ -228,35 +228,42 @@
         i++;
       })
 
-      const nameScale = d3.scaleBand().domain(firstNames).range([chartHeight , 0]).padding(0.05);
+      const nameScale = d3.scaleBand().domain(firstNames).range([chartHeight, 0]).padding(0.05);
       let leftAxis = d3.axisLeft(nameScale).tickFormat("");
-      let leftGridlines = d3.axisLeft(nameScale).tickSize(-chartWidth-10).tickFormat("");
 
       annotations.append("g")
                   .attr("class", "y axis")
                   .attr("transform",`translate(${margin.left-10},${margin.top})`)
                   .call(leftAxis);
-      annotations.append("g")
-                  .attr("class", "y gridlines")
-                  .attr("transform",`translate(${margin.left-10},${margin.top})`)
-                  .call(leftGridlines);
 
-      let salaryScale = d3.scaleLinear().domain([salaries[9], salaries[0]]).range([0, chartWidth]);
-      let bottomAxis = d3.axisBottom(salaryScale).tickFormat("");
-      annotations.append("g")
-                 .attr("class", "x axis")
-                 .attr("transform",`translate(${margin.left},${chartHeight+margin.top+10})`)
-                 .call(bottomAxis);
+      let salaryScale = d3.scaleLinear().domain([salaries[9], salaries[0]]).range([5, chartWidth-20]);
 
       let colorScale = d3.scaleSequential(d3.interpolateBlues).domain([salaries[9], salaries[0]]);
 
-      chartArea.selectAll('rect.bar').data( top10 )
-               .join('rect').attr('class','bar')
-               .attr("fill", d => colorScale(d['salary'])) //colorScale soon
-               .attr("x", 0 )
-               .attr("y", d => chartHeight - nameScale(d['nameFirst']) )
-               .attr("height", nameScale.bandwidth())
-               .attr("width", d => salaryScale(d['salary']))
+      let bars = chartArea.selectAll('.bar')
+                    .data(top10)
+                    .enter()
+                    .append("g");
+
+      bars.append('rect')
+          .data( top10 )
+          .attr('class','bar')
+          .attr("fill", "#5382B0")
+          .attr("x", margin.left )
+          .attr("y", d => chartHeight - nameScale(d['nameFirst']) )
+          .attr("height", nameScale.bandwidth())
+          .attr("width", d => salaryScale(d['salary']));
+
+      bars.append("text")
+          .text(d => d['nameFirst'] + " " + d['nameLast'])
+          .attr("x", margin.left + 15)
+          .attr("y", d=> chartHeight - nameScale(d['nameFirst']) + nameScale.bandwidth()/2 )
+          .attr("font-family" , "sans-serif")
+          .attr("font-size" , "15px")
+          .attr("fill" , "black")
+          .attr("dominant-baseline", "middle")
+          .attr("opacity", "0.7")
+          .attr("text-anchor", "center");
     }
 
     displayField();
