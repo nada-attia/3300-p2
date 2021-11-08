@@ -164,11 +164,12 @@
         svgField.append('text')
                 .attr('x', 550)
                 .attr('y', 550)
-                .text('Average Salary of ' + pos)
+                .text('Average Salary of ' + pos  + ' in ' + year)
                 .attr('id', 'avgSalaryPosText')
                 .attr('text-anchor', 'middle')
                 .attr('dominant-baseline', 'central')
-                .attr('fill', 'black');
+                .attr('fill', 'black')
+                .attr('font-size', 13);
                 
         svgField.append('text')
                 .attr('x', 550)
@@ -179,6 +180,7 @@
                 .attr('fill', 'steelblue')
                 .attr('text-anchor', 'middle')
                 .attr('dominant-baseline', 'central')
+                .attr('font-weight', 'bold')
       });
 
       positionsCircles.on('mouseout', function() {  
