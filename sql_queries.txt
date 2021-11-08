@@ -1,0 +1,30 @@
+Query 1: (maxpos view)
+SELECT *, 
+appearances.yearID AS year,
+MAX(G_p, G_c, G_1b, G_2b, G_3b, G_ss, G_lf, G_cf, G_rf) AS max_pos
+FROM appearances
+INNER JOIN salaries ON appearances.playerID = salaries.playerID
+INNER JOIN people ON appearances.playerID = people.playerID
+WHERE year >= 1985
+GROUP BY appearances.playerID, year
+
+Query 2:
+SELECT 
+year,
+teamID,
+salary, 
+nameFirst, 
+nameLast,
+CASE max_pos
+     WHEN G_p THEN 'G_p'
+     WHEN G_c THEN 'G_c'
+     WHEN G_1b THEN 'G_1b'
+     WHEN G_2b THEN 'G_2b'
+     WHEN G_3b THEN 'G_3b'
+     WHEN G_ss THEN 'G_ss'
+     WHEN G_lf THEN 'G_lf'
+     WHEN G_cf THEN 'G_cf'
+     WHEN G_rf THEN 'G_rf'
+END AS position
+FROM maxpos
+ORDER BY year, position, salary DESC
