@@ -57,7 +57,7 @@
   <script>
     const svgField = d3.select('svg#field');
     const svgChart = d3.select('svg#barchart');
-    var year = 2016;
+    var year = '2016'
 
     const positions = ['G_p', 'G_c', 'G_1b', 'G_2b', 'G_3b', 'G_ss', 'G_lf', 'G_cf', 'G_rf']
     const positionsOnField = {
@@ -108,24 +108,23 @@
       }
     }
 
-    function displayField() {
+     const displayField = async function() {
+
+      const data = await d3.csv('cleaned_data.csv');
       // clean up
       positions.forEach(pos => {
         positionsOnField[pos]['total salary'] = 0;
         positionsOnField[pos]['number of players'] = 0;
       })
       
-      const filePath = './yearly-data/'+ year + '.csv';
-      d3.csv(filePath).then( data => {
-      data.forEach(d => {
-        positions.forEach(pos => {
-          if (Number(d[pos]) > 0) {
-            positionsOnField[pos]['total salary'] += Number(d['salary']);
-            positionsOnField[pos]['number of players'] ++;
-          } 
-        })
+      const year_data = data.filter(d => d['year'] === year)
+      
+      year_data.forEach(d => {
+        const pos = d['position'];
+        positionsOnField[pos]['total salary'] += Number(d['salary']);
+        positionsOnField[pos]['number of players'] ++;
+        
       });
-
 
       positions.forEach(pos => {
         positionsOnField[pos]['average salary'] = positionsOnField[pos]['total salary']/positionsOnField[pos]['number of players']
@@ -152,6 +151,10 @@
           .attr('stroke-width', 2);
         const posID = d3.select(this).attr('id');
         const pos = positionsOnField[posID]['name'];
+        const posData = year_data.filter(d => d['position'] === posID)
+        const posTopData = posData.slice(0, 10);
+        console.log(posTopData);
+
         svgChart.append('text')
           .attr('id', 'title')
           .attr('x', 250)
@@ -191,8 +194,6 @@
         d3.select('#avgSalaryPosText').remove();
         d3.select('#avgSalaryText').remove();
       });
-      
-      })
     }
 
 
