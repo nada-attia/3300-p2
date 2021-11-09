@@ -31,7 +31,7 @@
     }
 
     .gridlines line {
-      stroke: #444;
+      stroke: rgb(194, 194, 194);
     }
   </style>
 
@@ -116,41 +116,41 @@
     }
 
     const teamSVGFile = {
-      "NYA" : "./res/SVG-yankees.svg",
-      "HOU": "./res/SVG-astros.svg",
-      "MIN": "./res/SVG-twins.svg",
-      "PHI": "./res/SVG-phillies.svg",
-      "TEX": "./res/SVG-rangers.svg",
-      "NYN": "./res/SVG-mets.svg",
-      "SDN": "./res/SVG-padres.svg",
-      "PIT": "./res/SVG-pirates.svg",
-      "CIN": "./res/SVG-reds.svg",
-      "ATL": "./res/SVG-braves.svg",
-      "LAN": "./res/SVG-dodgers.svg",
-      "KCA": "./res/SVG-royals.svg",
-      "CLE": "./res/SVG-indians.svg",
-      "TOR": "./res/SVG-bluejays.svg",
-      "CAL": "./res/SVG-angels.svg",
-      "SEA": "./res/SVG-mariners.svg",
-      "BAL": "./res/SVG-orioles.svg",
-      "OAK": "./res/SVG-athletics.svg",
-      "CHA": "./res/SVG-white-sox.svg",
-      "MON": "./res/SVG-expos.png",
-      "ML4": "./res/SVG-brewers.svg",
-      "DET" : "./res/SVG-tigers.svg",
-      "BOS" : "./res/SVG-red-sox.svg",
-      "SFN" : "./res/SVG-giants.svg",
-      "SLN" : "./res/SVG-cardinals.svg",
-      "CHN" : "./res/SVG-cubs.svg",
-      "LAA" : "./res/SVG-angels.svg",
-      "ANA" : "./res/SVG-angels.svg",
-      "ARI" : "./res/SVG-diamondbacks.svg",
-      "COL" : "./res/SVG-rockies.svg",
-      "FLO" : "./res/SVG-marlins.svg",
-      "MIA" : "./res/SVG-marlins.svg",
-      "MIL" : "./res/SVG-brewers.svg",
-      "TBA" : "./res/SVG-rays.svg",
-      "WAS" : "./res/SVG-nationals.svg"
+      'NYA' : './res/SVG-yankees.svg',
+      'HOU': './res/SVG-astros.svg',
+      'MIN': './res/SVG-twins.svg',
+      'PHI': './res/SVG-phillies.svg',
+      'TEX': './res/SVG-rangers.svg',
+      'NYN': './res/SVG-mets.svg',
+      'SDN': './res/SVG-padres.svg',
+      'PIT': './res/SVG-pirates.svg',
+      'CIN': './res/SVG-reds.svg',
+      'ATL': './res/SVG-braves.svg',
+      'LAN': './res/SVG-dodgers.svg',
+      'KCA': './res/SVG-royals.svg',
+      'CLE': './res/SVG-indians.svg',
+      'TOR': './res/SVG-bluejays.svg',
+      'CAL': './res/SVG-angels.svg',
+      'SEA': './res/SVG-mariners.svg',
+      'BAL': './res/SVG-orioles.svg',
+      'OAK': './res/SVG-athconstics.svg',
+      'CHA': './res/SVG-white-sox.svg',
+      'MON': './res/SVG-expos.png',
+      'ML4': './res/SVG-brewers.svg',
+      'DET' : './res/SVG-tigers.svg',
+      'BOS' : './res/SVG-red-sox.svg',
+      'SFN' : './res/SVG-giants.svg',
+      'SLN' : './res/SVG-cardinals.svg',
+      'CHN' : './res/SVG-cubs.svg',
+      'LAA' : './res/SVG-angels.svg',
+      'ANA' : './res/SVG-angels.svg',
+      'ARI' : './res/SVG-diamondbacks.svg',
+      'COL' : './res/SVG-rockies.svg',
+      'FLO' : './res/SVG-marlins.svg',
+      'MIA' : './res/SVG-marlins.svg',
+      'MIL' : './res/SVG-brewers.svg',
+      'TBA' : './res/SVG-rays.svg',
+      'WAS' : './res/SVG-nationals.svg'
     }
 
      const displayField = async function() {
@@ -207,7 +207,8 @@
           .attr('text-anchor', 'middle')
           .attr('dominant-baseline', 'central')
           .text('Top 10 Highest Paid ' + pos + ' in ' + year)
-          .style('font-size', 18);
+          .style('font-size', 18)
+          .style('font-weight', 800);;
 
         svgField.append('text')
                 .attr('x', 550)
@@ -245,67 +246,102 @@
 
     function displayChart(top10) {
       // top 10 is array of 10 objects with top10[0] is highest salary
-      const containerWidth = svgChart.attr("width");
-      const containerHeight = svgChart.attr("height");
+      const containerWidth = svgChart.attr('width');
+      const containerHeight = svgChart.attr('height');
       const margin = {top: 50, right: 10, bottom: 100, left: 50};
       const chartWidth = containerWidth - margin.left - margin.right;
       const chartHeight = containerHeight - margin.top - margin.bottom;
 
-      let chartArea = svgChart.append("g").attr("id","barData")
-                         .attr("transform",`translate(${margin.left},${margin.top})`);
-      let annotations = svgChart.append("g").attr("id","annotations");
+      const chartArea = svgChart.append('g').attr('id','barData')
+                         .attr('transform',`translate(${margin.left},${margin.top})`);
+      const annotations = svgChart.append('g').attr('id','annotations');
 
       let names = Array(10);
       let salaries = Array(10);
       let i = 0;
       top10.forEach( player => {
-        names[i] = player['nameFirst'] + " " + player['nameLast'];
+        names[i] = player['nameFirst'] + ' ' + player['nameLast'];
         salaries[i] = player['salary'];
         i++;
       })
 
       const nameScale = d3.scaleBand().domain(names).range([0, chartHeight]).padding(0.05);
-      let leftAxis = d3.axisLeft(nameScale).tickFormat("");
+      const salaryScale = d3.scaleLinear().domain([salaries[9], salaries[0]]).range([5, chartWidth-50]);
+      const bottomAxis = d3.axisBottom(salaryScale).tickFormat(d3.format('$.2s'));
+      const bottomGridlines = d3.axisBottom(salaryScale)
+          .tickSize(-chartHeight - 10)
+          .tickFormat('')
 
-      annotations.append("g")
-                  .attr("class", "y axis")
-                  .attr("transform",`translate(${margin.left-10},${margin.top})`)
-                  .call(leftAxis);
-
-      let salaryScale = d3.scaleLinear().domain([salaries[9], salaries[0]]).range([5, chartWidth-50]);
-
-      let bars = chartArea.selectAll('.bar')
-                    .data(top10)
-                    .enter()
-                    .append("g");
+      const bars = chartArea.selectAll('.bar')
+                            .data(top10)
+                            .enter()
+                            .append('g');
 
       bars.append('rect')
           .data( top10 )
           .attr('class','bar')
-          .attr("fill", "#5382B0")
-          .attr("x", 0 )
-          .attr("y", d => nameScale(d['nameFirst'] + " " + d['nameLast']) )
-          .attr("height", nameScale.bandwidth())
-          .attr("width", d => salaryScale(d['salary']))
+          .attr('fill', '#5382B0')
+          .attr('x', 0 )
+          .attr('y', d => nameScale(d['nameFirst'] + ' ' + d['nameLast']) )
+          .attr('height', nameScale.bandwidth())
+          .attr('width', d => salaryScale(d['salary']))
           .attr('opacity', 0.6);
 
-      bars.append("text")
-          .text(d => d['nameFirst'] + " " + d['nameLast'])
-          .attr("x", 10)
-          .attr("y", d=> nameScale(d['nameFirst'] + " " + d['nameLast']) + nameScale.bandwidth()/2 )
-          .attr("font-family" , "sans-serif")
-          .attr("font-size" , "15px")
-          .attr("fill" , "black")
-          .attr("dominant-baseline", "middle")
-          .attr("opacity", "0.7")
-          .attr("text-anchor", "center");
+      bars.append('text')
+          .text(d => d['nameFirst'] + ' ' + d['nameLast'])
+          .attr('x', 10)
+          .attr('y', d=> nameScale(d['nameFirst'] + ' ' + d['nameLast']) + nameScale.bandwidth()/2 )
+          .attr('font-family' , 'sans-serif')
+          .attr('font-size' , '15px')
+          .attr('fill' , 'black')
+          .attr('dominant-baseline', 'middle')
+          .attr('opacity', '0.7')
+          .attr('text-anchor', 'center');
 
-      bars.append("image")
+      bars.append('image')
           .attr('href', d => teamSVGFile[d['teamID']])
-          .attr("x", d => chartWidth - 35)
-          .attr("y", d => nameScale(d['nameFirst'] + " " + d['nameLast']))
-          .attr("height", "35px")
-          .attr("width", "35px");
+          .attr('x', d => chartWidth - 35)
+          .attr('y', d => nameScale(d['nameFirst'] + ' ' + d['nameLast']))
+          .attr('height', '35px')
+          .attr('width', '35px');
+          
+      // x-axis label
+      annotations.append('text')
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'central')
+        .attr('x', 250)
+        .attr('y', 600 - margin.bottom + 50)
+        .text('Salary (in USD)')
+        .style('font-family', 'Sans-Serif')
+        .style('font-size', 14)
+        .style('font-weight', 800);
+
+      // y-axis label
+      annotations.append('text')
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'central')
+        .attr('transform', 'translate(30,260)rotate(90)')
+        .text('Baseball Player')
+        .style('font-family', 'Sans-Serif')
+        .style('font-size', 14)
+        .style('font-weight', 800);
+
+      annotations.append('g')
+                  .attr('class', 'x axis')
+                  .attr('transform',`translate(${margin.left},${chartHeight+ margin.top + 10})`)
+                  .call(bottomAxis);
+                  
+      // annotations.append('g')
+      //            .attr('class', 'x gridlines')
+      //            .attr('transform', `translate(${margin['left']}, ${chartHeight + margin['top'] + 10})`)
+      //            .call(bottomGridlines);
+
+      // const leftAxis = d3.axisLeft(nameScale).tickFormat("");
+
+      // annotations.append("g")
+      //             .attr("class", "y axis")
+      //             .attr("transform",`translate(${margin.left-10},${margin.top})`)
+      //             .call(leftAxis);
 
     }
 
