@@ -116,25 +116,41 @@
     }
 
     const teamSVGFile = {
-      "NYA" : "SVG-yankees.svg",
-      "HOU": "SVG-astros.svg",
-      "MIN": "SVG-twins.svg",
-      //"PHI": "SVG-phillies.svg",
-      "TEX": "SVG-rangers.svg",
-      "NYN": "SVG-mets.svg",
-      "SDN": "SVG-padres.svg",
-      "PIT": "SVG-pirates.svg",
-      "CIN": "SVG-reds.svg",
-      "ATL": "SVG-braves.svg",
-      "LAN": "SVG-dodgers.svg",
-      "KCA": "SVG-royals.svg",
-      "CLE": "SVG-indians.svg",
-      "TOR": "SVG-bluejays.svg",
-      "CAL": "SVG-giants.svg",
-      "SEA": "SVG-mariners.svg",
-      "BAL": "SVG-orioles.svg",
-      "OAK": "SVG-athletics.svg",
-      "CHA": "SVG-white-sox.svg"
+      "NYA" : "./res/SVG-yankees.svg",
+      "HOU": "./res/SVG-astros.svg",
+      "MIN": "./res/SVG-twins.svg",
+      "PHI": "./res/SVG-phillies.svg",
+      "TEX": "./res/SVG-rangers.svg",
+      "NYN": "./res/SVG-mets.svg",
+      "SDN": "./res/SVG-padres.svg",
+      "PIT": "./res/SVG-pirates.svg",
+      "CIN": "./res/SVG-reds.svg",
+      "ATL": "./res/SVG-braves.svg",
+      "LAN": "./res/SVG-dodgers.svg",
+      "KCA": "./res/SVG-royals.svg",
+      "CLE": "./res/SVG-indians.svg",
+      "TOR": "./res/SVG-bluejays.svg",
+      "CAL": "./res/SVG-angels.svg",
+      "SEA": "./res/SVG-mariners.svg",
+      "BAL": "./res/SVG-orioles.svg",
+      "OAK": "./res/SVG-athletics.svg",
+      "CHA": "./res/SVG-white-sox.svg",
+      "MON": "./res/SVG-expos.png",
+      "ML4": "./res/SVG-brewers.svg",
+      "DET" : "./res/SVG-tigers.svg",
+      "BOS" : "./res/SVG-red-sox.svg",
+      "SFN" : "./res/SVG-giants.svg",
+      "SLN" : "./res/SVG-cardinals.svg",
+      "CHN" : "./res/SVG-cubs.svg",
+      "LAA" : "./res/SVG-angels.svg",
+      "ANA" : "./res/SVG-angels.svg",
+      "ARI" : "./res/SVG-diamondbacks.svg",
+      "COL" : "./res/SVG-rockies.svg",
+      "FLO" : "./res/SVG-marlins.svg",
+      "MIA" : "./res/SVG-marlins.svg",
+      "MIL" : "./res/SVG-brewers.svg",
+      "TBA" : "./res/SVG-rays.svg",
+      "WAS" : "./res/SVG-nationals.svg"
     }
 
      const displayField = async function() {
@@ -260,7 +276,7 @@
 
       let salaryScale = d3.scaleLinear().domain([salaries[9], salaries[0]]).range([5, chartWidth-20]);
 
-      let colorScale = d3.scaleSequential(d3.interpolateBlues).domain([salaries[9], salaries[0]]);
+      //let colorScale = d3.scaleSequential(d3.interpolateBlues).domain([salaries[9], salaries[0]]);
 
       let bars = chartArea.selectAll('.bar')
                     .data(top10)
@@ -286,6 +302,14 @@
           .attr("dominant-baseline", "middle")
           .attr("opacity", "0.7")
           .attr("text-anchor", "center");
+
+      bars.append("image")
+          .attr('href', d => teamSVGFile[d['teamID']])
+          .attr("x", d => chartWidth - 35)
+          .attr("y", d => chartHeight - nameScale(d['nameFirst']))
+          .attr("height", "35px")
+          .attr("width", "35px");
+
     }
 
     displayField();
