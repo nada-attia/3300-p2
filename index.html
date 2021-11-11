@@ -153,18 +153,6 @@
       'WAS' : './res/SVG-nationals.svg'
     }
 
-    // baseball field title 
-    svgField.append('text')
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'central')
-        .attr('x', 350)
-        .attr('y', -20)
-        .text('Baseball Field')
-        .style('font-family', 'Sans-Serif')
-        .style('font-size', 18)
-        .style('font-weight', 800)
-        .style('fill', 'black');
-
     // position labels 
     positions.forEach(pos => {
       svgField.append('text')
@@ -182,6 +170,21 @@
       svgChart.selectAll('*').remove();
       d3.select('#avgSalaryPosText').remove();
       d3.select('#avgSalaryText').remove();
+      d3.select('#fieldTitle').remove();
+
+      // baseball field title 
+      svgField.append('text')
+          .attr('text-anchor', 'middle')
+          .attr('dominant-baseline', 'central')
+          .attr('x', 350)
+          .attr('y', -20)
+          .text('Highest Paid Players at Each Position in ' + year)
+          .style('font-family', 'Sans-Serif')
+          .style('font-size', 18)
+          .style('font-weight', 800)
+          .style('fill', 'black')
+          .attr('id', 'fieldTitle');
+          
       const data = await d3.csv('cleaned_data.csv');
       // clean up
       positions.forEach(pos => {
