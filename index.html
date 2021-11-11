@@ -46,7 +46,7 @@
     </div>
     
     <!-- generated background image using figma -->
-    <svg id='field' width='700' height='650' viewBox='0 0 700 612' fill='none' xmlns='http://www.w3.org/2000/svg'>
+    <svg id='field' width='700' height='700' viewBox='0 0 700 612' fill='none' xmlns='http://www.w3.org/2000/svg'>
       <path d='M350 0C175.629 0 30.5457 104.819 0 243.194L350 595.056L700 243.194C669.454 104.819 524.37 0 350 0Z' fill='#84AB7E'/>
       <path d='M350.923 210C249.832 210 151.148 281.57 117 361.5L350.923 596L582.587 361.5C549.066 281.57 452.014 210 350.923 210Z' fill='#E6C5B3'/>
       <circle cx='349.423' cy='557' r='55' fill='#E6C5B3'/>
@@ -153,6 +153,31 @@
       'WAS' : './res/SVG-nationals.svg'
     }
 
+    // baseball field title 
+    svgField.append('text')
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'central')
+        .attr('x', 350)
+        .attr('y', -20)
+        .text('Baseball Field')
+        .style('font-family', 'Sans-Serif')
+        .style('font-size', 18)
+        .style('font-weight', 800)
+        .style('fill', 'black');
+
+    // position labels 
+    positions.forEach(pos => {
+      svgField.append('text')
+              .attr('text-anchor', 'middle')
+              .attr('dominant-baseline', 'central')
+              .attr('x', positionsOnField[pos]['x'])
+              .attr('y', positionsOnField[pos]['y'] + 35)
+              .text(positionsOnField[pos]['name'])
+              .style('font-family', 'Sans-Serif')
+              .style('font-size', 11)
+              .style('fill', 'black');
+    })
+
      const displayField = async function() {
 
       const data = await d3.csv('cleaned_data.csv');
@@ -186,10 +211,29 @@
                                         .attr('id', d => d)
                                         .attr('class', 'positions')
                                         .attr('fill', 'steelblue')
-                                        .attr('opacity', 0.5);
-                                    
+                                        .attr('opacity', 0.5)
+                                        .attr('stroke', 'none');
+
+      
+      // function to clear the chart graph once a new circle is selected 
+      const reset = () => {
+        svgChart.selectAll('*').remove();
+        svgField.selectAll('circle.positions').data(positions)
+                .join('circle')
+                .attr('cx', d => positionsOnField[d]['x'])
+                .attr('cy', d => positionsOnField[d]['y'])
+                .attr('r', d => avgSalaryScale(positionsOnField[d]['average salary']))
+                .attr('id', d => d)
+                .attr('class', 'positions')
+                .attr('fill', 'steelblue')
+                .attr('opacity', 0.5)
+                .attr('stroke', 'none');
+        d3.select('#avgSalaryPosText').remove();
+        d3.select('#avgSalaryText').remove();
+      }                              
 
       positionsCircles.on('mouseover', function() {
+        reset();
         d3.select(this)
           .attr('opacity', 1)
           .attr('stroke', 'black')
@@ -230,17 +274,6 @@
                 .attr('text-anchor', 'middle')
                 .attr('dominant-baseline', 'central')
                 .attr('font-weight', 'bold')
-      });
-
-      positionsCircles.on('mouseout', function() {  
-        d3.select(this)
-          .attr('opacity', 0.5)
-          .attr('stroke', 'none');      
-        d3.select('#title').remove();
-        d3.select('#avgSalaryPosText').remove();
-        d3.select('#avgSalaryText').remove();
-        d3.select('#annotations').remove();
-        d3.select('#barData').remove();
       });
     }
 
@@ -330,18 +363,6 @@
                   .attr('class', 'x axis')
                   .attr('transform',`translate(${margin.left},${chartHeight+ margin.top + 10})`)
                   .call(bottomAxis);
-                  
-      // annotations.append('g')
-      //            .attr('class', 'x gridlines')
-      //            .attr('transform', `translate(${margin['left']}, ${chartHeight + margin['top'] + 10})`)
-      //            .call(bottomGridlines);
-
-      // const leftAxis = d3.axisLeft(nameScale).tickFormat("");
-
-      // annotations.append("g")
-      //             .attr("class", "y axis")
-      //             .attr("transform",`translate(${margin.left-10},${margin.top})`)
-      //             .call(leftAxis);
 
     }
 
