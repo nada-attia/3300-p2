@@ -111,7 +111,7 @@
       'G_rf': {
         'x': 550,
         'y': 170,
-        'name': 'Center Fielder'
+        'name': 'Right Fielder'
       }
     }
 
@@ -179,7 +179,9 @@
     })
 
      const displayField = async function() {
-
+      svgChart.selectAll('*').remove();
+      d3.select('#avgSalaryPosText').remove();
+      d3.select('#avgSalaryText').remove();
       const data = await d3.csv('cleaned_data.csv');
       // clean up
       positions.forEach(pos => {
