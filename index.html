@@ -64,7 +64,7 @@
   <script>
     const svgField = d3.select('svg#field');
     const svgChart = d3.select('svg#barchart');
-    var year = '2016'
+    let year = '2016';
 
     const positions = ['G_p', 'G_c', 'G_1b', 'G_2b', 'G_3b', 'G_ss', 'G_lf', 'G_cf', 'G_rf']
     const positionsOnField = {
@@ -174,16 +174,16 @@
 
       // baseball field title 
       svgField.append('text')
-          .attr('text-anchor', 'middle')
-          .attr('dominant-baseline', 'central')
-          .attr('x', 350)
-          .attr('y', -30)
-          .text('Average Salary of Players at Each Position in ' + year)
-          .style('font-family', 'Sans-Serif')
-          .style('font-size', 18)
-          .style('font-weight', 800)
-          .style('fill', 'black')
-          .attr('id', 'fieldTitle');
+              .attr('text-anchor', 'middle')
+              .attr('dominant-baseline', 'central')
+              .attr('x', 350)
+              .attr('y', -30)
+              .text('Average Salary of Players at Each Position in ' + year)
+              .style('font-family', 'Sans-Serif')
+              .style('font-size', 18)
+              .style('font-weight', 800)
+              .style('fill', 'black')
+              .attr('id', 'fieldTitle');
           
       const data = await d3.csv('cleaned_data.csv');
       // clean up
@@ -250,14 +250,14 @@
         displayChart(posTopData);
 
         svgChart.append('text')
-          .attr('id', 'title')
-          .attr('x', 250)
-          .attr('y', 20)
-          .attr('text-anchor', 'middle')
-          .attr('dominant-baseline', 'central')
-          .text('Top 10 Highest Paid ' + pos + ' in ' + year)
-          .style('font-size', 18)
-          .style('font-weight', 800);;
+                .attr('id', 'title')
+                .attr('x', 250)
+                .attr('y', 20)
+                .attr('text-anchor', 'middle')
+                .attr('dominant-baseline', 'central')
+                .text('Top 10 Highest Paid ' + pos + ' in ' + year)
+                .style('font-size', 18)
+                .style('font-weight', 800);
 
         svgField.append('text')
                 .attr('x', 550)
@@ -278,12 +278,12 @@
                 .attr('fill', 'steelblue')
                 .attr('text-anchor', 'middle')
                 .attr('dominant-baseline', 'central')
-                .attr('font-weight', 'bold')
+                .attr('font-weight', 'bold');
       });
     }
 
     function displayChart(top10) {
-      // top 10 is array of 10 objects with top10[0] is highest salary
+      // Parameter top 10: array of 10 objects with top10[0] is highest salary
       const containerWidth = svgChart.attr('width');
       const containerHeight = svgChart.attr('height');
       const margin = {top: 50, right: 10, bottom: 100, left: 50};
@@ -294,6 +294,7 @@
                          .attr('transform',`translate(${margin.left},${margin.top})`);
       const annotations = svgChart.append('g').attr('id','annotations');
 
+      // formatted names and salaries seperated for top 10 players
       let names = Array(10);
       let salaries = Array(10);
       let i = 0;
@@ -306,15 +307,13 @@
       const nameScale = d3.scaleBand().domain(names).range([0, chartHeight]).padding(0.05);
       const salaryScale = d3.scaleLinear().domain([salaries[9], salaries[0]]).range([5, chartWidth-50]);
       const bottomAxis = d3.axisBottom(salaryScale).tickFormat(d3.format('$.2s'));
-      const bottomGridlines = d3.axisBottom(salaryScale)
-          .tickSize(-chartHeight - 10)
-          .tickFormat('')
 
       const bars = chartArea.selectAll('.bar')
                             .data(top10)
                             .enter()
                             .append('g');
 
+      // bars added
       bars.append('rect')
           .data( top10 )
           .attr('class','bar')
@@ -325,6 +324,7 @@
           .attr('width', d => salaryScale(d['salary']))
           .attr('opacity', 0.6);
 
+      // player names for each bar
       bars.append('text')
           .text(d => d['nameFirst'] + ' ' + d['nameLast'])
           .attr('x', 10)
@@ -336,39 +336,39 @@
           .attr('opacity', '0.7')
           .attr('text-anchor', 'center');
 
+      // svg of team logo for each player's respective team
       bars.append('image')
           .attr('href', d => teamSVGFile[d['teamID']])
-          .attr('x', d => chartWidth - 35)
+          .attr('x', chartWidth - 35)
           .attr('y', d => nameScale(d['nameFirst'] + ' ' + d['nameLast']))
           .attr('height', '35px')
           .attr('width', '35px');
           
       // x-axis label
       annotations.append('text')
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'central')
-        .attr('x', 250)
-        .attr('y', 600 - margin.bottom + 50)
-        .text('Salary (in USD)')
-        .style('font-family', 'Sans-Serif')
-        .style('font-size', 14)
-        .style('font-weight', 800);
+                 .attr('text-anchor', 'middle')
+                 .attr('dominant-baseline', 'central')
+                 .attr('x', 250)
+                 .attr('y', 600 - margin.bottom + 50)
+                 .text('Salary (in USD)')
+                 .style('font-family', 'Sans-Serif')
+                 .style('font-size', 14)
+                 .style('font-weight', 800);
 
       // y-axis label
       annotations.append('text')
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'central')
-        .attr('transform', 'translate(30,260)rotate(90)')
-        .text('Baseball Player')
-        .style('font-family', 'Sans-Serif')
-        .style('font-size', 14)
-        .style('font-weight', 800);
+                 .attr('text-anchor', 'middle')
+                 .attr('dominant-baseline', 'central')
+                 .attr('transform', 'translate(30,260)rotate(90)')
+                 .text('Baseball Player')
+                 .style('font-family', 'Sans-Serif')
+                 .style('font-size', 14)
+                 .style('font-weight', 800);
 
       annotations.append('g')
-                  .attr('class', 'x axis')
-                  .attr('transform',`translate(${margin.left},${chartHeight+ margin.top + 10})`)
-                  .call(bottomAxis);
-
+                 .attr('class', 'x axis')
+                 .attr('transform',`translate(${margin.left},${chartHeight+ margin.top + 10})`)
+                 .call(bottomAxis);
     }
 
     displayField();
@@ -378,9 +378,8 @@
       d3.select('b').text(this.value);
       year = this.value;
       displayField();
-
     });
-    
+
   </script>
   
 </body>
