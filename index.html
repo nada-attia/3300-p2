@@ -2,7 +2,9 @@
 <html>
 <head>
   <script src='https://d3js.org/d3.v7.min.js'></script>
-  <title>Project 2</title>
+  <h1><center>Average Salaries of Major League Baseball Players 1985 to 2016</center></h1>
+  <p><center>Baseball is a sport played by two teams, who alternate between trying to score points (by batting), and defend against the batting team (by fielding).<br> This set of visualizations represents salaries of Major League Baseball (MLB) players over the years.</center><br>
+</p>
 </head>
 <body>
   <style>
@@ -35,16 +37,16 @@
     }
   </style>
 
-  
+
   <div style='padding: 0 10px'>
     <div style='padding-bottom: 40px'>
       <p>
-        Selected Year: <b>2016</b> <br/> 
+        Selected Year: <b>2016</b> <br/>
         <span style='font-size: 12px'>Use the slider below to change the selected year.</span>
       </p>
-      <input type='range' min='1985' max='2016' value='2016' step='1' class='slider'>  
+      <input type='range' min='1985' max='2016' value='2016' step='1' class='slider'>
     </div>
-    
+
     <!-- generated background image using figma -->
     <svg id='field' width='700' height='700' viewBox='0 0 700 612' fill='none' xmlns='http://www.w3.org/2000/svg'>
       <path d='M350 0C175.629 0 30.5457 104.819 0 243.194L350 595.056L700 243.194C669.454 104.819 524.37 0 350 0Z' fill='#84AB7E'/>
@@ -58,13 +60,19 @@
       <circle cx='352.5' cy='425.5' r='31.5' fill='#E6C5B3'/>
       </svg>
     <svg width=500 height=600 id='barchart'></svg>
-    
+
+    <p> <center>In the visualization on the left, fielding positions are shown with blue circles. Use the slider to change the year that you want the visualization to represent. <br>For any given year that you select, you will notice that the circles are not all the same size; this demonstrates disparities between average salaries for<br> players at those fielding positions. Larger circles indicate a higher average salary for that position. Go ahead and hover over any circle to see the exact <br>average salary of MLB players for that position in that year.<br><br>
+
+    Further, when you hover over a circle, you will see another chart appear. This bar chart represents the top 10 highest paid players for that position in that <br>year. Their salaries are represented on the horizontal bottom axis, and their respective team affiliations are shown to the right of their names,<br> as team logos.<br><br>
+
+    Play around with different combinations of year and position to learn more about MLB salaries! </center></p>
+
   </div>
 
   <script>
     const svgField = d3.select('svg#field');
     const svgChart = d3.select('svg#barchart');
-    var year = '2016'
+    let year = '2016';
 
     const positions = ['G_p', 'G_c', 'G_1b', 'G_2b', 'G_3b', 'G_ss', 'G_lf', 'G_cf', 'G_rf']
     const positionsOnField = {
@@ -133,9 +141,9 @@
       'CAL': './res/SVG-angels.svg',
       'SEA': './res/SVG-mariners.svg',
       'BAL': './res/SVG-orioles.svg',
-      'OAK': './res/SVG-athconstics.svg',
+      'OAK': './res/SVG-athletics.svg',
       'CHA': './res/SVG-white-sox.svg',
-      'MON': './res/SVG-expos.png',
+      'MON': './res/SVG-expos.svg',
       'ML4': './res/SVG-brewers.svg',
       'DET' : './res/SVG-tigers.svg',
       'BOS' : './res/SVG-red-sox.svg',
@@ -153,7 +161,7 @@
       'WAS' : './res/SVG-nationals.svg'
     }
 
-    // position labels 
+    // position labels
     positions.forEach(pos => {
       svgField.append('text')
               .attr('text-anchor', 'middle')
@@ -172,33 +180,33 @@
       d3.select('#avgSalaryText').remove();
       d3.select('#fieldTitle').remove();
 
-      // baseball field title 
+      // baseball field title
       svgField.append('text')
-          .attr('text-anchor', 'middle')
-          .attr('dominant-baseline', 'central')
-          .attr('x', 350)
-          .attr('y', -30)
-          .text('Average Salary of Players at Each Position in ' + year)
-          .style('font-family', 'Sans-Serif')
-          .style('font-size', 18)
-          .style('font-weight', 800)
-          .style('fill', 'black')
-          .attr('id', 'fieldTitle');
-          
+              .attr('text-anchor', 'middle')
+              .attr('dominant-baseline', 'central')
+              .attr('x', 350)
+              .attr('y', -30)
+              .text('Average Salary of MLB Players at Each Position in ' + year)
+              .style('font-family', 'Sans-Serif')
+              .style('font-size', 18)
+              .style('font-weight', 800)
+              .style('fill', 'black')
+              .attr('id', 'fieldTitle');
+
       const data = await d3.csv('cleaned_data.csv');
       // clean up
       positions.forEach(pos => {
         positionsOnField[pos]['total salary'] = 0;
         positionsOnField[pos]['number of players'] = 0;
       })
-      
+
       const year_data = data.filter(d => d['year'] === year)
-      
+
       year_data.forEach(d => {
         const pos = d['position'];
         positionsOnField[pos]['total salary'] += Number(d['salary']);
         positionsOnField[pos]['number of players'] ++;
-        
+
       });
 
       positions.forEach(pos => {
@@ -219,8 +227,8 @@
                                         .attr('opacity', 0.5)
                                         .attr('stroke', 'none');
 
-      
-      // function to clear the chart graph once a new circle is selected 
+
+      // function to clear the chart graph once a new circle is selected
       const reset = () => {
         svgChart.selectAll('*').remove();
         svgField.selectAll('circle.positions').data(positions)
@@ -235,7 +243,7 @@
                 .attr('stroke', 'none');
         d3.select('#avgSalaryPosText').remove();
         d3.select('#avgSalaryText').remove();
-      }                              
+      }
 
       positionsCircles.on('mouseover', function() {
         reset();
@@ -250,25 +258,25 @@
         displayChart(posTopData);
 
         svgChart.append('text')
-          .attr('id', 'title')
-          .attr('x', 250)
-          .attr('y', 20)
-          .attr('text-anchor', 'middle')
-          .attr('dominant-baseline', 'central')
-          .text('Top 10 Highest Paid ' + pos + ' in ' + year)
-          .style('font-size', 18)
-          .style('font-weight', 800);;
+                .attr('id', 'title')
+                .attr('x', 250)
+                .attr('y', 20)
+                .attr('text-anchor', 'middle')
+                .attr('dominant-baseline', 'central')
+                .text('Top 10 Highest Paid ' + pos + ' in ' + year)
+                .style('font-size', 18)
+                .style('font-weight', 800);
 
         svgField.append('text')
                 .attr('x', 550)
                 .attr('y', 550)
-                .text('Average Salary of ' + pos  + ' in ' + year)
+                .text('Average Salary of MLB ' + pos  + ' in ' + year)
                 .attr('id', 'avgSalaryPosText')
                 .attr('text-anchor', 'middle')
                 .attr('dominant-baseline', 'central')
                 .attr('fill', 'black')
                 .attr('font-size', 13);
-                
+
         svgField.append('text')
                 .attr('x', 550)
                 .attr('y', 570)
@@ -278,12 +286,12 @@
                 .attr('fill', 'steelblue')
                 .attr('text-anchor', 'middle')
                 .attr('dominant-baseline', 'central')
-                .attr('font-weight', 'bold')
+                .attr('font-weight', 'bold');
       });
     }
 
     function displayChart(top10) {
-      // top 10 is array of 10 objects with top10[0] is highest salary
+      // Parameter top 10: array of 10 objects with top10[0] is highest salary
       const containerWidth = svgChart.attr('width');
       const containerHeight = svgChart.attr('height');
       const margin = {top: 50, right: 10, bottom: 100, left: 50};
@@ -294,6 +302,7 @@
                          .attr('transform',`translate(${margin.left},${margin.top})`);
       const annotations = svgChart.append('g').attr('id','annotations');
 
+      // formatted names and salaries seperated for top 10 players
       let names = Array(10);
       let salaries = Array(10);
       let i = 0;
@@ -306,15 +315,13 @@
       const nameScale = d3.scaleBand().domain(names).range([0, chartHeight]).padding(0.05);
       const salaryScale = d3.scaleLinear().domain([salaries[9], salaries[0]]).range([5, chartWidth-50]);
       const bottomAxis = d3.axisBottom(salaryScale).tickFormat(d3.format('$.2s'));
-      const bottomGridlines = d3.axisBottom(salaryScale)
-          .tickSize(-chartHeight - 10)
-          .tickFormat('')
 
       const bars = chartArea.selectAll('.bar')
                             .data(top10)
                             .enter()
                             .append('g');
 
+      // bars added
       bars.append('rect')
           .data( top10 )
           .attr('class','bar')
@@ -325,6 +332,7 @@
           .attr('width', d => salaryScale(d['salary']))
           .attr('opacity', 0.6);
 
+      // player names for each bar
       bars.append('text')
           .text(d => d['nameFirst'] + ' ' + d['nameLast'])
           .attr('x', 10)
@@ -336,52 +344,51 @@
           .attr('opacity', '0.7')
           .attr('text-anchor', 'center');
 
+      // svg of team logo for each player's respective team
       bars.append('image')
           .attr('href', d => teamSVGFile[d['teamID']])
-          .attr('x', d => chartWidth - 35)
+          .attr('x', chartWidth - 35)
           .attr('y', d => nameScale(d['nameFirst'] + ' ' + d['nameLast']))
           .attr('height', '35px')
           .attr('width', '35px');
-          
+
       // x-axis label
       annotations.append('text')
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'central')
-        .attr('x', 250)
-        .attr('y', 600 - margin.bottom + 50)
-        .text('Salary (in USD)')
-        .style('font-family', 'Sans-Serif')
-        .style('font-size', 14)
-        .style('font-weight', 800);
+                 .attr('text-anchor', 'middle')
+                 .attr('dominant-baseline', 'central')
+                 .attr('x', 250)
+                 .attr('y', 600 - margin.bottom + 50)
+                 .text('Salary (in USD)')
+                 .style('font-family', 'Sans-Serif')
+                 .style('font-size', 14)
+                 .style('font-weight', 800);
 
       // y-axis label
       annotations.append('text')
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'central')
-        .attr('transform', 'translate(30,260)rotate(90)')
-        .text('Baseball Player')
-        .style('font-family', 'Sans-Serif')
-        .style('font-size', 14)
-        .style('font-weight', 800);
+                 .attr('text-anchor', 'middle')
+                 .attr('dominant-baseline', 'central')
+                 .attr('transform', 'translate(30,260)rotate(270)')
+                 .text('Baseball Player')
+                 .style('font-family', 'Sans-Serif')
+                 .style('font-size', 14)
+                 .style('font-weight', 800);
 
       annotations.append('g')
-                  .attr('class', 'x axis')
-                  .attr('transform',`translate(${margin.left},${chartHeight+ margin.top + 10})`)
-                  .call(bottomAxis);
-
+                 .attr('class', 'x axis')
+                 .attr('transform',`translate(${margin.left},${chartHeight+ margin.top + 10})`)
+                 .call(bottomAxis);
     }
 
     displayField();
 
     const slider = d3.select('input');
-    slider.on('input', function() { 
+    slider.on('input', function() {
       d3.select('b').text(this.value);
       year = this.value;
       displayField();
-
     });
-    
+
   </script>
-  
+
 </body>
 </html>
